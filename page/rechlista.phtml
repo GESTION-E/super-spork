@@ -1,0 +1,183 @@
+<?php
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright 2013 Gestión-e - Gestión Informática Eficiente. All rights reserved.
+ *
+ *
+ */
+
+//~ Template for list.php
+// variables:
+//  $title - page title
+//  $status - status of TODOs to be displayed
+//  $todos - TODOs to be displayed
+?>
+
+<h1>
+    Motivos de rechazo
+</h1>
+
+<?php if (!empty($errors)): ?>
+    <ul class="errors">
+        <?php foreach ($errors as $error): ?>
+            <?php /* @var $error Error */ ?>
+            <li><?php echo $error[1]; ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+<div class="panel panel-default">
+                <table  class="table table-striped table-hover table-condensed">
+                    <thead>
+                    <tr>
+                    <th align="center" >Código</th>
+                    <th >Descripción</th>
+                    <th align="center" >Depositaria</th>
+                    <th align="center" >Girada</th>
+                    <th align="center" >Modificar</th>
+                    <th align="center" >Eliminar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php foreach ($rechazos as $rechazo): ?>
+                            <tr>        
+                                <td align="center"><?php echo sprintf('R%02d',$rechazo->getNumero()); ?></td>
+                                <td><?php echo $rechazo->getDescripcion(); ?></td>
+                                <td align="center"><img src="img/icono/DONE.png" alt="" title="Eliminar" class="icon" style="<?php echo ($rechazo->getDepositaria())? '':'display: none;'; ?>" /></td>
+                                <td align="center"><img src="img/icono/DONE.png" alt="" title="Eliminar" class="icon" style="<?php echo ($rechazo->getGirada())? '':'display: none;'; ?>" /></td>
+                                <td align="center"><a href="#" data-toggle="modal" data-target="#modalRechazo" 
+                                data-numero="<?php echo sprintf('R%02d',$rechazo->getNumero()); ?>"
+                                data-descripcion="<?php echo $rechazo->getDescripcion(); ?>"
+                                data-depositaria="<?php echo ($rechazo->getDepositaria())? 'true':'false'; ?>"
+                                data-girada="<?php echo ($rechazo->getGirada())? 'true':'false'; ?>"
+                                ><img src="img/action/edit.png" alt="" title="Modificar" class="icon" /></a></td>
+                                <td align="center"><a href="#" data-toggle="modal" data-target="#modalRechazoDel" 
+                                data-numero="<?php echo sprintf('R%02d',$rechazo->getNumero()); ?>"
+                                data-descripcion="<?php echo $rechazo->getDescripcion(); ?>"
+                                data-depositaria="<?php echo ($rechazo->getDepositaria())? 'true':'false'; ?>"
+                                data-girada="<?php echo ($rechazo->getGirada())? 'true':'false'; ?>"
+                                ><img src="img/action/delete.png" alt="" title="Eliminar" class="icon" /></a></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+</div>  
+<div class="row" align="center"><a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRechazoAdd" >Agregar elemento</a>  
+</div>
+
+
+<!-- Modal -->
+  <div class="modal fade" id="modalRechazo" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:rgb(35, 51, 143);color:white !important;text-align:center;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3>Editar elemento</h3>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <form id="formulario" action="#" method="post"  role="form">
+            <div class="form-group">
+              <label for="numero">Código</label>
+              <input type="text" class="form-control" id="numero" name="numero" readonly>
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripcion</label>
+              <input type="text" class="form-control" id="descripcion" name="descripcion" >
+            </div>
+            <div class="form-group">
+              <label for="depositaria">Depositaria</label>
+              <input type="checkbox" id="depositaria" name="depositaria" value="1" >
+            </div>
+            <div class="form-group">
+              <label for="girada">Girada</label>
+              <input type="checkbox" id="girada" name="girada" value="1" >
+            </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" name="update" class="btn btn-primary btn-block" value="Actualizar" </input>              
+          </form>
+        </div>
+      </div>
+    </div>
+ </div>
+
+<!-- Modal -->
+  <div class="modal fade" id="modalRechazoAdd" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:rgb(41, 143, 35);color:white !important;text-align:center;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3>Agregar elemento</h3>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <form id="formulario" action="#" method="post"  role="form">
+            <div class="form-group">
+              <label for="numero">Código</label>
+              <div class="input-group">
+              <span class="input-group-addon">R</span>
+              <input type="text" class="form-control" id="numero" name="numero" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripcion</label>
+              <input type="text" class="form-control" id="descripcion" name="descripcion" >
+            </div>
+            <div class="form-group">
+              <label for="depositaria">Depositaria</label>
+              <input type="checkbox" id="depositaria" name="depositaria" value="1" >
+            </div>
+            <div class="form-group">
+              <label for="girada">Girada</label>
+              <input type="checkbox" id="girada" name="girada" value="1" >
+            </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" name="add" class="btn btn-success btn-block" value="Agregar" </input>              
+          </form>
+        </div>
+      </div>
+    </div>
+ </div>
+
+ <!-- Modal -->
+  <div class="modal fade" id="modalRechazoDel" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: rgb(167, 29, 0);color:white !important;text-align:center;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3>Se eliminará este elemento</h3>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <form id="formulario" action="#" method="post"  role="form">
+            <div class="form-group">
+              <label for="numero">Código</label>
+              <input type="text" class="form-control" id="numero" name="numero" readonly>
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripcion</label>
+              <input type="text" class="form-control" id="descripcion" readonly>
+            </div>
+            <div class="form-group">
+              <label for="depositaria">Depositaria</label>
+              <input type="checkbox" id="depositaria" value="1" disabled readonly>
+            </div>
+            <div class="form-group">
+              <label for="girada">Girada</label>
+              <input type="checkbox" id="girada" value="1" disabled readonly>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" name="delete" class="btn btn-danger btn-block" value="Confirmar" </input>              
+          </form>
+        </div>
+      </div>
+    </div>
+ </div>

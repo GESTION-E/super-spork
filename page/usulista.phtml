@@ -1,0 +1,148 @@
+<?php
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright 2013 Gestión-e - Gestión Informática Eficiente. All rights reserved.
+ *
+ *
+ */
+
+//~ Template for list.php
+// variables:
+//  $title - page title
+//  $status - status of TODOs to be displayed
+//  $todos - TODOs to be displayed
+?>
+
+<h1>
+    Administración de Usuarios
+</h1>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Seleccione un criterio de filtro</h3>
+    </div>
+    <div class="panel-body">
+        <form name="input" class="form-inline" role="form" action="index.php" method="get" >
+            <fieldset>
+                <div class="row">
+                    <input type="hidden"  name ='page' value="usulista"/>
+
+                    <div class="form-group col-md-3">
+                    <label for="centro">Centro:</label>
+                        <input type="text" class="form-control" name="centro" id="centro" value="<?php echo $centro;?>" size="3" >
+                    </div>
+
+                    <div class="form-group col-md-3">
+                    <label for="suc">Sucursal:</label>
+                        <input type="text" class="form-control" name="suc" id="suc" value="<?php echo $suc;?>" size="3" >
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="estado">Estado:</label> 
+                        <select id="estado" class="form-control"  type="text" name="estado" >
+                            <?php foreach ($estados as $est): ?>
+                                <option value="<?php echo $est; ?>"
+                                <?php if ($est == $estado): ?>
+                                            selected="selected"
+                                        <?php endif; ?>
+                                        ><?php echo $est; ?></option>
+                                    <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <br>
+                        <input type="submit" class="btn btn-primary form-control"  value="Aplicar"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <ul class="pager">
+                        <li class="previous">
+                            <BUTTON <?php echo ($pagina == 0) ? 'disabled' : '' ?> name="first" value="first" title="Primera página" type="submit" class="btn btn-default"><<</BUTTON>
+                        </li>
+                        <li class="previous">
+                            <BUTTON <?php echo ($pagina == 0) ? 'disabled' : '' ?> name="prev" value="prev" title="Página anterior" type="submit" class="btn btn-default"><</BUTTON>
+                        </li>
+                        <li >
+                            <BUTTON disabled title="" type="submit" class="btn btn-default">Página <?php echo $pagina + 1 ?> de <?php echo $paginas + 1 ?></BUTTON>
+                        </li>
+                        <li class="next">
+                            <BUTTON <?php echo ($pagina == $paginas) ? 'disabled' : '' ?> name="next" value="next" title="Página siguiente" type="submit" class="btn btn-default">></BUTTON>
+                        </li>
+                        <li class="next">
+                            <BUTTON <?php echo ($pagina == $paginas) ? 'disabled' : '' ?> name="last" value="last" title="Última página" type="submit" class="btn btn-default">>></BUTTON>
+                        </li>
+                    </ul>
+                </div>
+                </div>
+                </div>
+
+                <table  class="table table-striped table-hover table-condensed">
+
+                    <thead>
+                        <tr>
+                            <th >Usuario</th>
+                            <th >Nombre</th>
+                            <th >Centro</th>
+                            <th >Sucursal</th>
+                            <th >Permisos asignados</th>
+                            <th >Estado</th>
+                    <th >Modificar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php foreach ($personas as $persona): ?>
+                            <tr>
+                                
+                                <td><?php echo $persona->getId(); ?></td>
+                                <td><?php echo $persona->getNombre(); ?></td>
+                                <td><?php echo $persona->getCentro(); ?></td>
+                                <td><?php echo $persona->getSuc(); ?></td>
+                                <td style="text-align: left">
+                                    <?php $permisos = explode(',', $persona->getPermisos()); ?>
+                                    <?php foreach ($permisos as $permiso): ?>
+                                        <?php echo Usuario::getDescPermiso($permiso) . '<br>' ?>
+                                    <?php endforeach; ?>
+                                </td>
+                                <td align="center"><?php echo $persona->getEstado(); ?></td>
+                                <?php if (!($persona->getId() == Usuario::getUserid())): ?>
+                                    <td align="center"><a href="<?php echo Utils::createLink('usuedit', array('id' => $persona->getId())); ?>"><img src="img/action/edit.png" alt="" title="Modificar el usuario" class="icon" /></a></td>
+                                <?php else: ?>
+                                    <td>&nbsp;</td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div class="panel panel-default">
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <ul class="pager">
+                                <li class="previous">
+                                    <BUTTON <?php echo ($pagina == 0) ? 'disabled' : '' ?> name="first" value="first" title="Primera página" type="submit" class="btn btn-default"><<</BUTTON>
+                                </li>
+                                <li class="previous">
+                                    <BUTTON <?php echo ($pagina == 0) ? 'disabled' : '' ?> name="prev" value="prev" title="Página anterior" type="submit" class="btn btn-default"><</BUTTON>
+                                </li>
+                                <li >
+                                    <BUTTON disabled title="" type="submit" class="btn btn-default">Página <?php echo $pagina + 1 ?> de <?php echo $paginas + 1 ?></BUTTON>
+                                </li>
+                                <li class="next">
+                                    <BUTTON <?php echo ($pagina == $paginas) ? 'disabled' : '' ?> name="next" value="next" title="Página siguiente" type="submit" class="btn btn-default">></BUTTON>
+                                </li>
+                                <li class="next">
+                                    <BUTTON <?php echo ($pagina == $paginas) ? 'disabled' : '' ?> name="last" value="last" title="Última página" type="submit" class="btn btn-default">>></BUTTON>
+                                </li>
+                            </ul>
+                        </div>
+                        </filedset>
+                        </form><br>
+                        <div class="row">
+                            <div class="col-md-12" align="center">    
+                                <a href="<?php echo Utils::createLink('usuedit', array('id' => '')); ?>"><input type="button" name="boton" class="btn btn-primary" value="Ingresar un nuevo usuario" /></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>

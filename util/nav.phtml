@@ -1,0 +1,97 @@
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-icon pull-left" href="#"><img src="img/Logo1B.png" style="height:50px"/></a>
+                    <a class="navbar-brand" href="<?php echo Utils::createLink('home'); ?>">&nbsp;&nbsp;Revisión Técnica</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <?php if (Usuario::askPermiso('e-')): ?>
+                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Enviada<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                        <li class="primera"><a href="<?php echo Utils::createLink('envlista'); ?>">Consultar</a></li>
+                                    <?php if (Usuario::askPermiso('ew')): ?>
+                                        <li><a href="<?php echo Utils::createLink('envrev',array('estado' => '10', 'idx' => 0)); ?>">Revisar pendientes</a></li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (Usuario::askPermiso('c-')): ?>
+                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Cartera<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                        <li class="primera"><a href="<?php echo Utils::createLink('carlista'); ?>">Consultar</a></li>
+                                    <?php if (Usuario::askPermiso('cw')): ?>
+                                        <li><a href="<?php echo Utils::createLink('carrev',array('e' => 'p', 'i' => 0)); ?>">Revisar pendientes</a></li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (Usuario::askPermiso('r-')): ?>
+                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Recibida<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                        <li class="primera"><a href="<?php echo Utils::createLink('reclista'); ?>">Consultar</a></li>
+                                    <?php if (Usuario::askPermiso('rw')): ?>
+                                        <li><a href="<?php echo Utils::createLink('recrev',array('e' => 'p', 'i' => 0)); ?>">Revisar pendientes</a></li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (Usuario::askPermiso('a-')): ?>
+                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrar<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <?php if (Usuario::askPermiso('ap')): ?>
+                                        <li class="primera"><a href="<?php echo Utils::createLink('suclista'); ?>">Sucursales</a></li>
+                                        <li><a href="<?php echo Utils::createLink('cenlista'); ?>">Centros</a></li>
+                                        <li><a href="<?php echo Utils::createLink('rechlista'); ?>">Rechazos</a></li>
+                                        <li><a href="<?php echo Utils::createLink('nivlista'); ?>">Niveles</a></li>
+                                    <?php endif; ?>
+                                    <?php if (Usuario::askPermiso('ai')): ?>
+                                        <li><a href="<?php echo Utils::createLink('intproc'); ?>">Procesar Interfaz</a></li>
+                                    <?php endif; ?>
+                                    <?php if (Usuario::askPermiso('au')): ?>
+                                        <li><a href="<?php echo Utils::createLink('usulista'); ?>">Usuarios</a></li>
+                                        <li><a href="<?php echo Utils::createLink('loglista'); ?>">Registro</a></li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                    <?php if ($page=='envrev'): ?>
+                        <li><a class="bt" href="#">Frente:</a></li>
+                        <li><img class="bt btnav" src="img/icono/Z.png" onclick="$('.bt').toggle();$('#f').toggleClass('ZT')"/></li>
+                        <li><img class="bt btnav" src="img/icono/R180.png" onclick="$('.bt').toggle();$('#f').toggleClass('R180')"/></li>
+                        <li><img class="bt btnav" src="img/icono/R90.png" onclick="$('.bt').toggle();$('#f').toggleClass('R90T')"/></li>
+                        <li><img class="bt btnav" src="img/icono/R270.png" onclick="$('.bt').toggle();$('#f').toggleClass('R270T')"/></li>
+                        <li><a class="bt" href="#">Dorso:</a></li>
+                        <li><img class="bt btnav" src="img/icono/Z.png" onclick="$('.bt').toggle();$('#d').toggleClass('ZB')"/></li>
+                        <li><img class="bt btnav" src="img/icono/R180.png" onclick="$('.bt').toggle();$('#d').toggleClass('R180')"/></li>
+                        <li><img class="bt btnav" src="img/icono/R90.png" onclick="$('.bt').toggle();$('#d').toggleClass('R90B')"/></li>
+                        <li><img class="bt btnav" src="img/icono/R270.png" onclick="$('.bt').toggle();$('#d').toggleClass('R270B')"/></li>
+                        <li><img class="bt btnav" src="img/icono/Back.png" style="display: none;" onclick="$('.bt').toggle();
+                        $('#f').removeClass('ZT');
+                        $('#d').removeClass('ZB');
+                        $('#f,#d').removeClass('R180');
+                        $('#f').removeClass('R90T');
+                        $('#f').removeClass('R270T');
+                        $('#d').removeClass('R90B');
+                        $('#d').removeClass('R270B');
+                        "/></li>
+                    <?php endif; ?>
+                        <li class="dropdown">
+                        
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo Usuario::getUserid(); ?><b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-toggle="modal" data-target="#modalSalir" >Salir</a></li>
+                            </ul>
+                        </li>
+                    </ul>                        
+                </div><!--/.navbar-collapse -->
+            </div>
+        </div>

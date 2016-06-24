@@ -1,0 +1,184 @@
+<?php /*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright 2013 Gestión-e - Gestión Informática Eficiente. All rights reserved.
+ *
+ *
+ */
+?>
+
+  <div class="col-md-2">
+    <div class="bt">
+      <div class="form-group"></div>
+      <div class="panel panel-info" align="center">
+            <div class="panel-heading">Datos</div>
+            <div class="panel-body">
+              <p class="fijo"><?php echo sprintf("Ent:         %03d",$cheque->getEnt());?></p>
+              <p class="fijo"><?php echo sprintf("Suc:         %03d",$cheque->getSuc());?></p>
+              <p class="fijo"><?php echo sprintf("CP:         %4d",$cheque->getCp());?></p>
+              <p class="fijo"><?php echo sprintf("Nro:    %8d",$cheque->getNro());?></p>
+              <p class="fijo"><?php echo sprintf("Cta: %11d",$cheque->getCta());?></p>
+              <p class="fijo">Importe</p>
+              <p class="fijo"><?php echo Utils::formatMoney($cheque->getImporte(),16);?></p>
+            </div>
+      </div>
+      <?php if ($cheque->getEstado()>0): ?>
+      <div class="panel panel-info" align="center">
+            <div class="panel-heading">Revisores</div>
+            <div class="panel-body">
+              <ul class="list-group">
+                <?php foreach ($revisores as $r):?>
+                  <li class="list-group-item"><?php echo $r;?></li>
+                <?php endforeach;?>
+              </ul>
+            </div>
+      </div>
+      <?php endif; ?>
+    </div>
+  </div>
+  <div class="col-md-8 " align="center">
+    <div class="row img-doc">
+    <img id="f" class="img-responsive" 
+    onfocus="$('.bt').toggle();$('#f').toggleClass('ZT')"
+    onblur="$('.bt').toggle();$('#f').toggleClass('ZT')" 
+    src="<?php echo $cheque->getImagenFrente();?>"
+    tabindex=2/>
+    </div>
+    <div class="row img-doc">
+    <img id="d" class="img-responsive" 
+    onfocus="$('.bt').toggle();$('#d').toggleClass('ZB')"
+    onblur="$('.bt').toggle();$('#d').toggleClass('ZB')" 
+    src="<?php echo $cheque->getImagenDorso();?>"
+    tabindex=3/>
+    </div>
+  </div>
+  <div class="col-md-2" align="center">
+    <div class="bt">
+    <form name="input" class="form-horizontal" role="form" method="post" action="
+            <?php echo Utils::createLink('envrev', array(
+                                            'centro' => $centro, 
+                                            'sucdep' => $sucdep,
+                                            'ent'    => $ent,
+                                            'suc'    => $suc,
+                                            'cp'     => $cp,
+                                            'nro'    => $nro,
+                                            'cta'    => $cta,
+                                            'importe'=> $importe,
+                                            'fecha'  => $fecha,
+                                            'estado' => $estado, 
+                                            'idx' => $idx)); ?>">
+        <div class="form-group">
+        <input type="hidden"  name ='cmc7' value="<?php echo $cmc7;?>"/>
+        </div>
+
+          <div class="panel  <?php 
+        switch ($cheque->getEstado()) {
+          case 6:
+            echo "panel-success";
+            break;
+          case 7:
+            echo "panel-danger";
+            break;
+          default:
+            echo "panel-warning";
+            break;
+        };?>" align="center">
+            <div class="panel-heading"><?php echo $cheque->getEstadoFormat();?></div>
+            <div class="panel-body">
+            <?php foreach ($motivos as $r):?>
+              <label class="checkbox">
+              <input type="checkbox" name="rechazo_form[<?php echo $r->getNumero();?>]" value="1" 
+                   <?php echo (in_array($r->getNumero(),$rechazos))? 'checked':'';?>
+                   data-toggle="tooltip" title="<?php echo $r->getDescripcion();?>">
+                   <div data-toggle="tooltip" title="<?php echo $r->getDescripcion();?>">
+                   <?php echo 'R'.$r->getNumero();?>
+                   </div>
+              </label>
+            <?php endforeach;?>
+          </div>
+        </div>
+      <div class="container">
+        <?php if ($modifica): ?>
+        <div class="form-group">
+          <button type="submit" name="submit" class="btn btn-primary btn-block" autofocus tabindex=1 >Confirmar</button>
+        </div>
+        <div class="form-group">
+          <a href="#" type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#modalSucursal" >Consultar Sucursal</a> 
+        </div>
+        <?php endif; ?>
+      </div>  
+        <?php if ($recorre): ?>
+          <div class="btn-group">
+            <a href="
+            <?php echo Utils::createLink('envrev', array(
+                                            'centro' => $centro, 
+                                            'sucdep' => $sucdep,
+                                            'ent'    => $ent,
+                                            'suc'    => $suc,
+                                            'cp'     => $cp,
+                                            'nro'    => $nro,
+                                            'cta'    => $cta,
+                                            'importe'=> $importe,
+                                            'fecha'  => $fecha,
+                                            'estado' => $estado, 
+                                            'idx' => (($idx-2)<0)? 0:($idx-2))); ?>
+            " class="btn btn-info" role="button">&lt;Ant</a>
+            <a href="
+            <?php echo Utils::createLink('envrev', array(
+                                            'centro' => $centro, 
+                                            'sucdep' => $sucdep,
+                                            'ent'    => $ent,
+                                            'suc'    => $suc,
+                                            'cp'     => $cp,
+                                            'nro'    => $nro,
+                                            'cta'    => $cta,
+                                            'importe'=> $importe,
+                                            'fecha'  => $fecha,
+                                            'estado' => $estado, 
+                                            'idx' => $idx)); ?>
+            " class="btn btn-info" role="button">Sig&gt;</a>
+          </div>  
+        <?php endif; ?>
+    </form>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalSucursal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:rgb(41, 143, 35);color:white !important;text-align:center;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3>Consultar Sucursal</h3>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <form id="formulario" role="form" method="post" action="
+            <?php echo Utils::createLink('envrev', array(
+                                            'centro' => $centro, 
+                                            'sucdep' => $sucdep,
+                                            'ent'    => $ent,
+                                            'suc'    => $suc,
+                                            'cp'     => $cp,
+                                            'nro'    => $nro,
+                                            'cta'    => $cta,
+                                            'importe'=> $importe,
+                                            'fecha'  => $fecha,
+                                            'estado' => $estado, 
+                                            'idx' => $idx)); ?>">
+        <div class="form-group">
+        <input type="hidden"  name ='cmc7' value="<?php echo $cmc7;?>"/>
+        </div>
+            <div class="form-group">
+              <label for="descripcion">Mensaje</label>
+              <input type="text" class="form-control input-lg" id="descripcion" name="descripcion" >
+            </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" name="sucursal" class="btn btn-success btn-block" value="Enviar email" </input>              
+          </form>
+        </div>
+      </div>
+    </div>
+ </div>
